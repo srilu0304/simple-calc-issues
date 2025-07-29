@@ -1,20 +1,30 @@
 pipeline {
     agent any
+
     tools {
-        maven 'Maven 3' // Name you configured in Jenkins
+        maven 'Maven 3'   // Use the Maven name you configured under Jenkins -> Global Tool Configuration
     }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: '<your-repo-url>'
+                // Replace with your repo URL
+                git branch: 'master', url: 'https://github.com/srilu0304/simple-calc-issues.git'
             }
         }
+
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('Local SonarQube') {
-                    sh 'mvn clean verify sonar:sonar'
+                withSonarQubeEnv('Local SonarQube') { 
+                    bat 'mvn clean verify sonar:sonar'
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished'
         }
     }
 }
